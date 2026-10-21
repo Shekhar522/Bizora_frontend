@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -52,6 +52,9 @@ const LoginPage = () => {
               {translate('Log in')}
             </Button>
           </Form.Item>
+          <div style={{ textAlign: 'center', marginTop: '16px' }}>
+            Don't have an account? <Link to="/register">Create account</Link>
+          </div>
         </Form>
       </Loading>
     );
@@ -61,4 +64,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-
