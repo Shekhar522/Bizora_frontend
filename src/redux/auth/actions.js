@@ -2,33 +2,46 @@ import * as actionTypes from './types';
 import * as authService from '@/auth';
 import { request } from '@/request';
 
+
 export const login =
   ({ loginData }) =>
   async (dispatch) => {
     dispatch({
       type: actionTypes.REQUEST_LOADING,
     });
-    const data = await authService.login({ loginData });
 
-    if (data.success === true) {
-      const auth_state = {
-        current: data.result,
-        isLoggedIn: true,
-        isLoading: false,
-        isSuccess: true,
-      };
-      window.localStorage.setItem('auth', JSON.stringify(auth_state));
-      window.localStorage.removeItem('isLogout');
-      dispatch({
-        type: actionTypes.REQUEST_SUCCESS,
-        payload: data.result,
-      });
-    } else {
+    try {
+      const data = await authService.login({ loginData });
+
+      if (data?.success === true) {
+        const auth_state = {
+          current: data.result,
+          isLoggedIn: true,
+          isLoading: false,
+          isSuccess: true,
+        };
+
+        window.localStorage.setItem('auth', JSON.stringify(auth_state));
+        window.localStorage.removeItem('isLogout');
+
+        dispatch({
+          type: actionTypes.REQUEST_SUCCESS,
+          payload: data.result,
+        });
+      } else {
+        dispatch({
+          type: actionTypes.REQUEST_FAILED,
+        });
+      }
+    } catch (error) {
+      console.error('Bizora login failed:', error);
+
       dispatch({
         type: actionTypes.REQUEST_FAILED,
       });
     }
   };
+
 
 export const register =
   ({ registerData }) =>
